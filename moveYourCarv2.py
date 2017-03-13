@@ -2,6 +2,7 @@ import urllib2
 import datetime
 import re
 from bs4 import BeautifulSoup
+from bs4 import Tag
 
 # today's date
 date = datetime.datetime.today().strftime('%-m/%d/%Y')
@@ -13,29 +14,33 @@ opener = urllib2.build_opener()
 opener.addheaders = [('User-Agent', 'Mozilla/5.0')]
 page = opener.open(website)
 # turn page into html object
-soup = BeautifulSoup(page)
+soup = BeautifulSoup(page, 'html.parser')
 #print soup.prettify()
 
 #get all home games
 all_rows = soup.find_all('tr', class_='schedule_home_tr')
 
 # see if any game is today
-entryForToday = [t for t in all_rows if t.findAll('nobr',text=re.compile('.*({}).*'.format(date)))]
+# entryForToday = [t for t in all_rows if t.findAll('nobr',text=re.compile('.*({}).*'.format(date)))]
 
-# testing weekend
-# entryForToday = [t for t in all_rows if t.findAll('nobr',text=re.compile('3/11/2017'))]
+# hard coding for testing weekend
+entryForToday = [t for t in all_rows if t.findAll('nobr',text=re.compile('3/14/2017'))]
 
-# print entryForToday
+classForTime = "schedule_dgrd_time/result"
+timeOfGame = "none";
+
 if entryForToday:
-    entryIsWeekday = [t for t in entryForToday if t.findAll('td',
+    entryForToday = [t for t in entryForToday if t.findAll('td',
                                                             class_='schedule_dgrd_game_day_of_week',
                                                             text=re.compile('.*({}).*'.format(validDay)))]
-    if entryIsWeekday:
-        print 'entryIsWeekday'
-        myClass = 'schedule_dgrd_time/result'
-        timeOfGame = entryIsWeekday[0].contents[4]
-        text = timeOfGame.content
-        print timeOfGame
+    if entryForToday:
+        for elements in entryForToday:
+            for element in elements:
 
-    else:
-        print 'not weekday'
+                if isinstance(element, Tag):
+                    if element.attrs['class'][0] == classForTime:
+                        timeOfGame = element.text
+                    # print element.text
+                        break
+
+print timeOfGame
