@@ -45,8 +45,6 @@ if entryForToday:
                     timeOfGame = element.text
                     break
 
-print timeOfGame
-
 #send to slack channel
 message = 'There\'s a game today that starts at ' + timeOfGame
 slack = Slacker(credentials.slackAPIToken)
