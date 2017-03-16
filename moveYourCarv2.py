@@ -46,6 +46,9 @@ if entryForToday:
                     break
 
 #send to slack channel
-message = 'There\'s a game today that starts at ' + timeOfGame
+if timeOfGame == "none":
+    message = "There is no game today!"
+else:
+    message = 'There\'s a game today that starts at ' + timeOfGame
 slack = Slacker(credentials.slackAPIToken)
 slack.chat.post_message(credentials.user, message)
