@@ -51,4 +51,5 @@ if timeOfGame == "none":
 else:
     message = 'There\'s a game today that starts at ' + timeOfGame
 slack = Slacker(credentials.slackAPIToken)
-slack.chat.post_message(credentials.user, message)
+slack.chat.post_message(credentials.jelliDM_asAlan, message)
+slack.reminders.add(message, "in 1 minute",credentials.jelliUID)
