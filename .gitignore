@@ -1,3 +1,4 @@
 .idea/
 credentials.py*
 testSlackClient.py
+testAddReminder.py
