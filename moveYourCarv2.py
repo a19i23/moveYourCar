@@ -9,7 +9,7 @@ from slacker import Slacker
 import credentials
 
 # today's date
-date = datetime.datetime.today().strftime('%-m/%d/%Y')
+date = datetime.datetime.today().strftime('%-m/%-d/%Y')
 validDay = "Mon\.|Tue\.|Wed\.|Thu(r)?(s)?\.|Fri\."
 website = "http://www.texassports.com/schedule.aspx?path=baseball"
 
@@ -51,5 +51,5 @@ if timeOfGame == "none":
 else:
     message = 'There\'s a game today that starts at ' + timeOfGame
 slack = Slacker(credentials.slackAPIToken)
-slack.chat.post_message(credentials.jelliDM_asAlan, message)
+slack.chat.post_message(credentials.jelliDM_asAlan, message+website)
 slack.reminders.add(message, "in 1 minute",credentials.jelliUID)
