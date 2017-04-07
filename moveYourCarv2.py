@@ -32,6 +32,7 @@ entryForToday = [t for t in all_rows if t.findAll('nobr',text=re.compile('.*({})
 
 classForTime = "schedule_dgrd_time/result"
 timeOfGame = "none";
+gameToday=False
 
 if entryForToday:
     entryForToday = [t for t in entryForToday if t.findAll('td',
@@ -45,11 +46,14 @@ if entryForToday:
                     timeOfGame = element.text
                     break
 
+slack = Slacker(credentials.slackAPIToken)
 #send to slack channel
 if timeOfGame == "none":
     message = "There is no game today!"
 else:
+    gameToday = True
     message = 'There\'s a game today that starts at ' + timeOfGame
-slack = Slacker(credentials.slackAPIToken)
-slack.chat.post_message(credentials.jelliDM_asAlan, message+website)
-slack.reminders.add(message, "in 1 minute",credentials.jelliUID)
+
+slack.chat.post_message(credentials.jelliDM_asAlan, message+"\n"+website)
+if gameToday:
+    slack.reminders.add(message, "in 1 minute",credentials.jelliUID)
